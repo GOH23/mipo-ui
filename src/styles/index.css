@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glass-bg {
+    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm;
+  }
+
+  .glass-border {
+    @apply border border-gray-200/50 dark:border-gray-700/50;
+  }
+
+  .glass-shadow {
+    @apply shadow-glass;
+  }
+
+  .classic-bg {
+    @apply bg-white dark:bg-gray-800;
+  }
+
+  .classic-border {
+    @apply border border-gray-200 dark:border-gray-700;
+  }
+
+  .classic-shadow {
+    @apply shadow-classic;
+  }
+
+  .theme-card {
+    @apply rounded-xl overflow-hidden;
+  }
+
+  .theme-button {
+    @apply relative rounded-lg font-medium transition-all duration-300 overflow-hidden;
+  }
+
+  .theme-button::before {
+    @apply absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 transition-opacity;
+    content: '';
+  }
+
+  .theme-button:hover::before {
+    @apply opacity-100 dark:opacity-50;
+  }
+
+  .theme-panel-header {
+    @apply transition-all duration-300;
+  }
+
+  .theme-panel-content {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}

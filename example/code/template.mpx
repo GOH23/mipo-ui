@@ -1,0 +1,16 @@
+page MainPage: {
+    props: {
+        theme: "glass" | "classic"
+    }
+    Header: {
+        className: {
+
+        }
+    }
+    Body: {
+
+    }
+    Footer: {
+
+    }
+}

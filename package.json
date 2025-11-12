@@ -1,0 +1,81 @@
+{
+  "name": "mipo-ui",
+  "version": "1.0.0",
+  "description": "Test UI",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "vite build --config vite.config.lib.ts",
+    "dev": "vite build --config vite.config.lib.ts --watch",
+    "start": "cd example && npm run dev",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write src/**/*.{ts,tsx,js,jsx}",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "@emotion/is-prop-valid": "^1.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@emotion/babel-plugin": "^11.13.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "@vitest/ui": "^0.34.0",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^3.4.18",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.0",
+    "vite-plugin-dts": "^3.6.0",
+    "vitest": "^0.34.0"
+  },
+  "depen                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     dencies": {
+    "lucide-react": "^0.264.0"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "glass",
+    "glassmorphism",
+    "components",
+    "theme",
+    "dark-mode"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/glass-ui-kit"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/glass-ui-kit/issues"
+  },
+  "homepage": "https://github.com/yourusername/glass-ui-kit#readme",
+  "dependencies": {
+    "@emotion/is-prop-valid": "^1.2.0",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.553.0",
+    "vite-plugin-lib-inject-css": "^2.2.2"
+  }
+}
