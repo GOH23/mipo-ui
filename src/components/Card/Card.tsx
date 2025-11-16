@@ -1,8 +1,21 @@
+// components/Card/Card.tsx
 "use client"
 import { ReactNode } from 'react';
 import { useTheme } from '../../themes/ThemeContext';
 import { getThemeClasses } from '../../themes/themeClasses';
 
+/**
+ * Интерфейс для компонента Card
+ * @interface CardProps
+ * @property {ReactNode} children - Основное содержимое карточки
+ * @property {ReactNode} [header] - Заголовок карточки (опционально)
+ * @property {ReactNode} [footer] - Футер карточки (опционально)
+ * @property {string} [className] - Дополнительные CSS-классы для основной обертки
+ * @property {string} [headerClassName] - Дополнительные CSS-классы для заголовка
+ * @property {string} [contentClassName] - Дополнительные CSS-классы для контента
+ * @property {string} [footerClassName] - Дополнительные CSS-классы для футера
+ * @property {'glass' | 'classic'} [theme] - Тема карточки (переопределяет контекстную)
+ */
 export interface CardProps {
   children: ReactNode;
   header?: ReactNode;
@@ -14,6 +27,21 @@ export interface CardProps {
   theme?: 'glass' | 'classic';
 }
 
+/**
+ * Универсальный компонент Card для создания карточек с заголовком, контентом и футером
+ * @component
+ * @param {CardProps} props - Свойства компонента
+ * @returns {JSX.Element} Компонент карточки
+ * 
+ * @example
+ * <Card 
+ *   header={<h3>Заголовок</h3>}
+ *   footer={<button>Действие</button>}
+ *   className="my-card"
+ * >
+ *   Основной контент карточки
+ * </Card>
+ */
 const Card = ({
   children,
   header,

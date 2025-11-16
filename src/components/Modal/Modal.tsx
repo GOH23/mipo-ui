@@ -42,11 +42,11 @@ const Modal = ({
     md: 'max-w-lg',
     lg: 'max-w-xl',
     xl: 'max-w-3xl',
-    full: 'max-w-full w-full'
+    full: 'max-w-full w-full mx-4'
   };
 
   const modalClasses = getThemeClasses(effectiveTheme, 'modal');
-  const backdropClasses = getThemeClasses(effectiveTheme, 'modal-backdrop');
+  const overlayClasses = getThemeClasses(effectiveTheme, 'modal', 'overlay');
 
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +61,7 @@ const Modal = ({
 
   const defaultOverlayMotion: MotionProps = {
     initial: { opacity: 0 },
-    animate: { opacity: 0.5 },
+    animate: { opacity: 1 },
     exit: { opacity: 0 },
     transition: { duration: 0.2 },
     ...motionProps.overlay
@@ -80,8 +80,6 @@ const Modal = ({
     ...motionProps.content
   };
 
-  if (!isOpen) return null;
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -89,39 +87,41 @@ const Modal = ({
           <motion.div
             {...defaultOverlayMotion}
             onClick={backdropClose ? onClose : undefined}
-            className={`${backdropClasses} fixed inset-0 z-50 flex items-center justify-center p-4`}
-            layout
+            className={`fixed inset-0 z-50 flex items-center justify-center p-4 min-h-dvh ${overlayClasses}`}
           >
             <motion.div
               {...defaultContentMotion}
               onClick={e => e.stopPropagation()}
-              className={`${modalClasses} ${sizeClasses[size]} w-full rounded-xl shadow-lg overflow-hidden`}
-              layout
+              className={`${modalClasses} ${sizeClasses[size]} w-full max-h-[90vh] overflow-hidden flex flex-col`}
             >
-              <div className={`flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 ${getThemeClasses(effectiveTheme, 'modal-header')}`}>
-                {title && <h3 className="text-lg font-medium">{title}</h3>}
-                {!hideClose && (
-                  <Button
-                    btnType="secondary"
-                    variant="ghost"
-                    size="sm"
-                    onClick={onClose}
-                    icon={<X size={18} />}
-                    theme={effectiveTheme}
-                    motionProps={{
-                      whileHover: { rotate: 90 },
-                      whileTap: { scale: 0.9 }
-                    }}
-                  />
-                )}
-              </div>
+              {/* Header */}
+              {(title || !hideClose) && (
+                <div className={`flex justify-between items-center p-6 border-b ${getThemeClasses(effectiveTheme, 'modal', 'header')}`}>
+                  {title && <h3 className="text-lg font-medium m-0">{title}</h3>}
+                  {!hideClose && (
+                    <Button
+                      btnType="secondary"
+                      variant="ghost"
+                      size="sm"
+                      onClick={onClose}
+                      icon={<X size={18} />}
+                      theme={effectiveTheme}
+                      motionProps={{
+                        whileTap: { scale: 0.9 }
+                      }}
+                    />
+                  )}
+                </div>
+              )}
               
-              <div className={`p-4 max-h-[70vh] overflow-y-auto ${getThemeClasses(effectiveTheme, 'modal-content')}`}>
+              {/* Body */}
+              <div className={`flex-1 overflow-y-auto ${getThemeClasses(effectiveTheme, 'modal', 'body')}`}>
                 {children}
               </div>
               
+              {/* Footer */}
               {footer && (
-                <div className={`flex justify-end gap-2 p-4 border-t border-gray-200 dark:border-gray-700 ${getThemeClasses(effectiveTheme, 'modal-footer')}`}>
+                <div className={`border-t ${getThemeClasses(effectiveTheme, 'modal', 'footer')}`}>
                   {footer}
                 </div>
               )}

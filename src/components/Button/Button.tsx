@@ -1,13 +1,32 @@
+// components/Button/Button.tsx
 "use client"
-import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
+import { ButtonHTMLAttributes, forwardRef, ReactNode, useMemo } from 'react';
 import { motion, MotionProps } from 'framer-motion';
 import { useTheme } from '../../themes/ThemeContext';
 import { getThemeClasses } from '../../themes/themeClasses';
 
+/** Типы кнопок */
 export type ButtonType = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'glass';
+/** Варианты стилей кнопок */
 export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'link';
+/** Размеры кнопок */
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
+/**
+ * Интерфейс для компонента Button
+ * @interface ButtonProps
+ * @extends ButtonHTMLAttributes<HTMLButtonElement>
+ * @property {ButtonType} [btnType='primary'] - Тип кнопки
+ * @property {ButtonVariant} [variant='solid'] - Вариант стиля кнопки
+ * @property {ButtonSize} [size='md'] - Размер кнопки
+ * @property {ReactNode} [icon] - Иконка кнопки
+ * @property {'left' | 'right'} [iconPosition='left'] - Позиция иконки
+ * @property {boolean} [loading=false] - Состояние загрузки
+ * @property {boolean} [disabled=false] - Отключенное состояние
+ * @property {boolean} [fullWidth=false] - Растягивание на всю ширину
+ * @property {'glass' | 'classic'} [theme] - Тема кнопки (переопределяет контекстную)
+ * @property {MotionProps} [motionProps] - Дополнительные свойства анимации Framer Motion
+ */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     btnType?: ButtonType;
     variant?: ButtonVariant;
@@ -21,6 +40,23 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     motionProps?: MotionProps;
 }
 
+/**
+ * Универсальный компонент Button с поддержкой анимаций и различных стилей
+ * @component
+ * @param {ButtonProps} props - Свойства компонента
+ * @param {React.Ref<HTMLButtonElement>} ref - Референс на DOM-элемент кнопки
+ * @returns {JSX.Element} Компонент кнопки
+ * 
+ * @example
+ * <Button 
+ *   btnType="primary" 
+ *   size="lg" 
+ *   icon={<Icon />} 
+ *   loading={true}
+ * >
+ *   Нажми меня
+ * </Button>
+ */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     btnType = 'primary',
     variant = 'solid',
@@ -39,6 +75,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 }, ref) => {
     const { theme: contextTheme } = useTheme();
     const effectiveTheme = propTheme || contextTheme;
+    
+    // Фильтрация пропсов для Framer Motion
     const {
         onDrag,
         onDragEnd,
@@ -46,26 +84,28 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         onAnimationStart,
         ...filteredProps
     } = props;
-    const sizeClasses = {
+
+    // Оптимизация: мемоизация классов размеров
+    const sizeClasses = useMemo(() => ({
         xs: 'px-2 py-1 text-xs',
         sm: 'px-3 py-1.5 text-sm',
         md: 'px-4 py-2 text-base',
         lg: 'px-5 py-2.5 text-lg',
         xl: 'px-6 py-3 text-xl'
-    };
+    }), []);
 
     const baseClasses = getThemeClasses(effectiveTheme, 'button', btnType);
     const sizeClass = sizeClasses[size];
     const widthClass = fullWidth ? 'w-full' : '';
     const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
 
-    // Безопасное объединение motion props
-    const mergedMotionProps: MotionProps = {
+    // Оптимизация: безопасное объединение motion props
+    const mergedMotionProps: MotionProps = useMemo(() => ({
         whileHover: { scale: 1.02 },
         whileTap: { scale: 0.98 },
         transition: { type: 'spring', damping: 15, stiffness: 300 },
         ...motionProps
-    };
+    }), [motionProps]);
 
     return (
         <motion.button

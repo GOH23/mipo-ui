@@ -1,6 +1,6 @@
 {
   "name": "mipo-ui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Test UI",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -11,6 +11,8 @@
     "LICENSE"
   ],
   "scripts": {
+    "run:dev": "cd example/mipo-ui-demo && npm run dev",
+    "test:dev": "npm link && cd example/mipo-ui-demo && npm i && npm link mipo-ui && npm run dev",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "vite build --config vite.config.lib.ts",
@@ -76,6 +78,7 @@
     "@emotion/is-prop-valid": "^1.2.0",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.553.0",
+    "uuid": "^13.0.0",
     "vite-plugin-lib-inject-css": "^2.2.2"
   }
 }

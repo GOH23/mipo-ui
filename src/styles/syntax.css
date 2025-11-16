@@ -1,0 +1,158 @@
+.token-keyword { 
+  color: rgb(147, 51, 234);
+  font-weight: 600;
+}
+
+.dark .token-keyword {
+  color: rgb(192, 132, 252);
+}
+
+.token-type { 
+  color: rgb(15, 118, 110);
+}
+
+.dark .token-type {
+  color: rgb(45, 212, 191);
+}
+
+.token-string { 
+  color: rgb(22, 101, 52);
+}
+
+.dark .token-string {
+  color: rgb(74, 222, 128);
+}
+
+.token-number { 
+  color: rgb(29, 78, 216);
+}
+
+.dark .token-number {
+  color: rgb(96, 165, 250);
+}
+
+.token-boolean { 
+  color: rgb(185, 28, 28);
+}
+
+.dark .token-boolean {
+  color: rgb(248, 113, 113);
+}
+
+.token-null { 
+  color: rgb(185, 28, 28);
+}
+
+.dark .token-null {
+  color: rgb(248, 113, 113);
+}
+
+.token-comment { 
+  color: rgb(107, 114, 128);
+  font-style: italic;
+}
+
+.dark .token-comment {
+  color: rgb(156, 163, 175);
+}
+
+.token-operator { 
+  color: rgb(190, 24, 93);
+}
+
+.dark .token-operator {
+  color: rgb(236, 72, 153);
+}
+
+.token-symbol { 
+  color: rgb(55, 65, 81);
+}
+
+.dark .token-symbol {
+  color: rgb(209, 213, 219);
+}
+
+.token-identifier { 
+  color: rgb(17, 24, 39);
+}
+
+.dark .token-identifier {
+  color: rgb(229, 231, 235);
+}
+
+.token-text { 
+  color: rgb(17, 24, 39);
+}
+
+.dark .token-text {
+  color: rgb(229, 231, 235);
+}
+
+/* Встроенные функции и объекты */
+.token-builtin { 
+  color: rgb(202, 138, 4);
+}
+
+.dark .token-builtin {
+  color: rgb(252, 211, 77);
+}
+
+/* Методы объектов */
+.token-method { 
+  color: rgb(219, 39, 119);
+}
+
+.dark .token-method {
+  color: rgb(244, 114, 182);
+}
+
+/* JSX/TSX специфичные токены */
+.token-jsx-tag {
+  color: rgb(136, 19, 145);
+}
+
+.dark .token-jsx-tag {
+  color: rgb(232, 121, 249);
+}
+
+.token-jsx-component {
+  color: rgb(136, 19, 145);
+  font-weight: 600;
+}
+
+.dark .token-jsx-component {
+  color: rgb(232, 121, 249);
+}
+
+.token-jsx-attribute {
+  color: rgb(30, 64, 175);
+  font-weight: 500;
+}
+
+.dark .token-jsx-attribute {
+  color: rgb(147, 197, 253);
+}
+
+.token-jsx-event {
+  color: rgb(136, 19, 145);
+  font-weight: 600;
+}
+
+.dark .token-jsx-event {
+  color: rgb(232, 121, 249);
+}
+
+.token-jsx-expression {
+  color: rgb(190, 24, 93);
+  font-weight: 600;
+}
+
+.dark .token-jsx-expression {
+  color: rgb(236, 72, 153);
+}
+
+/* Сохранение пробелов и форматирования */
+.token-whitespace {
+  /* Пробелы сохраняются как есть */
+  white-space: pre;
+}

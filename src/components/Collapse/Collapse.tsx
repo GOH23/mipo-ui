@@ -1,11 +1,25 @@
+// components/Collapse/Collapse.tsx
 "use client"
-import { useState, ReactNode, Children, isValidElement } from 'react';
+import { useState, ReactNode, Children, isValidElement, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence, MotionProps } from 'framer-motion';
 import Panel from './Panel';
 import Button from '../Button/Button';
 import { ChevronDownCircle, ChevronUpCircle } from 'lucide-react';
 import { useTheme } from '../../themes/ThemeContext';
 
+/**
+ * Интерфейс для панели компонента Collapse
+ * @interface CollapsePanelProps
+ * @property {string} key - Уникальный ключ панели
+ * @property {ReactNode} label - Заголовок панели
+ * @property {ReactNode} children - Содержимое панели
+ * @property {ReactNode} [extra] - Дополнительный контент в заголовке
+ * @property {boolean} [showArrow=true] - Показывать стрелку раскрытия
+ * @property {boolean} [disabled=false] - Отключить панель
+ * @property {string} [className] - Дополнительные CSS-классы для панели
+ * @property {string} [headerClassName] - Дополнительные CSS-классы для заголовка
+ * @property {string} [contentClassName] - Дополнительные CSS-классы для контента
+ */
 export interface CollapsePanelProps {
   key: string;
   label: ReactNode;
@@ -18,6 +32,25 @@ export interface CollapsePanelProps {
   contentClassName?: string;
 }
 
+/**
+ * Интерфейс для компонента Collapse
+ * @interface CollapseProps
+ * @property {string[]} [activeKey] - Контролируемые активные ключи (управляемый режим)
+ * @property {string[]} [defaultActiveKey=[]] - Ключи по умолчанию (неуправляемый режим)
+ * @property {function} [onChange] - Callback при изменении активных ключей
+ * @property {boolean} [accordion=false] - Режим аккордеона (только одна открытая панель)
+ * @property {boolean} [ghost=false] - Призрачный режим без границ
+ * @property {'left' | 'right'} [expandIconPosition='right'] - Позиция иконки раскрытия
+ * @property {string} [className] - Дополнительные CSS-классы
+ * @property {CollapsePanelProps[]} [items] - Массив панелей через проп items
+ * @property {ReactNode} [children] - Дочерние элементы (альтернатива items)
+ * @property {boolean} [showControls=false] - Показать кнопки управления
+ * @property {'top' | 'bottom'} [controlPosition='top'] - Позиция кнопок управления
+ * @property {'glass' | 'classic'} [theme] - Тема компонента (переопределяет контекстную)
+ * @property {MotionProps} [motionProps] - Свойства анимации для контейнера
+ * @property {MotionProps} [panelMotionProps] - Свойства анимации для панелей
+ * @property {MotionProps} [expandMotionProps] - Свойства анимации для иконок раскрытия
+ */
 export interface CollapseProps {
   activeKey?: string[];
   defaultActiveKey?: string[];
@@ -36,6 +69,22 @@ export interface CollapseProps {
   expandMotionProps?: MotionProps;
 }
 
+/**
+ * Компонент Collapse для создания аккордеонов и раскрывающихся панелей
+ * @component
+ * @param {CollapseProps} props - Свойства компонента
+ * @returns {JSX.Element} Компонент раскрывающихся панелей
+ * 
+ * @example
+ * <Collapse accordion={true} showControls={true}>
+ *   <Collapse.Panel key="1" header="Панель 1">
+ *     Содержимое панели 1
+ *   </Collapse.Panel>
+ *   <Collapse.Panel key="2" header="Панель 2">
+ *     Содержимое панели 2
+ *   </Collapse.Panel>
+ * </Collapse>
+ */
 const Collapse = ({
   activeKey: controlledActiveKey,
   defaultActiveKey = [],
@@ -60,7 +109,8 @@ const Collapse = ({
   const isControlled = controlledActiveKey !== undefined;
   const activeKeys = isControlled ? controlledActiveKey : internalActiveKey;
 
-  const handlePanelClick = (key: string) => {
+  // Оптимизация: useCallback для обработчиков
+  const handlePanelClick = useCallback((key: string) => {
     let newKeys: string[];
 
     if (accordion) {
@@ -78,9 +128,9 @@ const Collapse = ({
     if (onChange) {
       onChange(newKeys);
     }
-  };
+  }, [activeKeys, accordion, isControlled, onChange]);
 
-  const expandAll = () => {
+  const expandAll = useCallback(() => {
     const allKeys = items ? items.map(item => item.key) : [];
     if (allKeys.length === 0) return;
 
@@ -93,9 +143,9 @@ const Collapse = ({
     if (onChange) {
       onChange(newKeys);
     }
-  };
+  }, [activeKeys, items, isControlled, onChange]);
 
-  const collapseAll = () => {
+  const collapseAll = useCallback(() => {
     const newKeys: string[] = [];
     
     if (!isControlled) {
@@ -105,9 +155,10 @@ const Collapse = ({
     if (onChange) {
       onChange(newKeys);
     }
-  };
+  }, [isControlled, onChange]);
 
-  const ControlButtons = () => (
+  // Оптимизация: мемоизация кнопок управления
+  const ControlButtons = useCallback(() => (
     <div className="flex flex-wrap gap-2 mb-4">
       <Button 
         btnType="primary" 
@@ -138,15 +189,16 @@ const Collapse = ({
         Collapse All
       </Button>
     </div>
-  );
+  ), [expandAll, collapseAll, effectiveTheme]);
 
-  const defaultMotionProps: MotionProps = {
+  // Оптимизация: мемоизация motion props
+  const defaultMotionProps: MotionProps = useMemo(() => ({
     initial: { opacity: 0, y: 10 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -10 },
     transition: { duration: 0.3 },
     ...motionProps
-  };
+  }), [motionProps]);
 
   return (
     <motion.div {...defaultMotionProps} className="relative">

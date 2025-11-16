@@ -1,733 +1,711 @@
+// TestMain.tsx - Обновленная документация компонентов
 "use client"
-import { 
-  Button, 
-  Card, 
-  Collapse, 
-  Modal, 
-  Dropdown, 
-  MessageProvider, 
-  useMessage, 
-  ThemeProvider, 
-  useTheme 
+import {
+  Button,
+  Card,
+  Code,
+  Collapse,
+  Modal,
+  MessageProvider,
+  useMessage,
+  ThemeProvider,
+  useTheme,
+  Layout,
+  Header,
+  Body,
+  Footer,
+  Sidebar,
+  Input,
+  Textarea,
+  Spinner,
+  Progress,
+  Skeleton,
+  FloatingContentBackground,
+  ProductGrid,
+  ProductCard,
+  Badge,
+  Price
 } from "mipo-ui"
-import { 
-  Info, 
-  CheckCircle, 
-  AlertTriangle, 
-  AlertCircle, 
-  ChevronDown, 
-  ChevronUp,
-  X,
+import {
+  CheckCircle,
+  AlertTriangle,
+  AlertCircle,
   Settings,
   User,
-  LogOut,
   Mail,
   Bell,
   Download,
   Share2,
   Plus,
-  Star,
+  Grid,
+  Zap,
+  Activity,
+  Menu,
+  X,
+  Type,
+  Edit3,
+  Maximize2,
+  Minimize2,
+  Component,
+  Sparkles,
+  Code as CodeIcon,
+  Sun,
+  Moon,
+  Palette,
+  CreditCard,
+  AlertCircle as AlertCircleIcon,
+  ShoppingCart,
   Heart,
   Eye,
-  EyeOff,
-  RefreshCw,
-  Filter,
-  Search,
-  Menu,
-  Grid,
-  List,
-  Calendar,
-  Clock,
-  MapPin,
-  Phone,
-  Camera,
-  Upload,
-  Folder,
-  File,
-  Lock,
-  Unlock,
-  Zap,
-  Award,
-  TrendingUp,
-  TrendingDown,
-  BarChart2,
-  PieChart,
-  Activity,
-  Globe,
-  Shield,
-  Key,
-  Code,
-  Database,
-  Server,
-  Cloud,
-  Wifi,
-  Bluetooth,
-  Battery,
-  Volume2,
-  MoreVertical
+  Star
 } from "lucide-react"
 import { useState } from "react"
+import { FeedbackDemo } from "./FeedbackDemo"
+import { InputDemo } from "./InputDemo"
+import { motion, MotionProps } from "framer-motion"
 
-// ===== ТЕМА ПЕРЕКЛЮЧАТЕЛЬ =====
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  
+// ===== КОМПОНЕНТ ПЕРЕКЛЮЧАТЕЛЯ ТЕМЫ И РЕЖИМА =====
+function ThemeAndModeToggle() {
+  const { theme, setTheme, mode, setMode } = useTheme()
+
   return (
-    <Card className="mb-8 p-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Тема интерфейса</h3>
-        <div className="flex gap-2">
-          <Button
-            btnType={theme === 'glass' ? 'primary' : 'secondary'}
-            variant={theme === 'glass' ? 'solid' : 'outline'}
-            onClick={() => setTheme('glass')}
-            icon={<Zap className="w-4 h-4" />}
-          >
-            Glass
-          </Button>
-          <Button
-            btnType={theme === 'classic' ? 'primary' : 'secondary'}
-            variant={theme === 'classic' ? 'solid' : 'outline'}
-            onClick={() => setTheme('classic')}
-            icon={<Grid className="w-4 h-4" />}
-          >
-            Classic
-          </Button>
-        </div>
+    <div className="flex items-center gap-2">
+      <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+        <button
+          onClick={() => setMode('light')}
+          className={`p-2 rounded-md transition-all ${mode === 'light'
+            ? 'bg-white shadow-sm text-gray-900'
+            : 'text-gray-500 hover:text-gray-700'
+            }`}
+        >
+          <Sun className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => setMode('dark')}
+          className={`p-2 rounded-md transition-all ${mode === 'dark'
+            ? 'bg-gray-700 text-white shadow-sm'
+            : 'text-gray-500 hover:text-gray-300'
+            }`}
+        >
+          <Moon className="w-4 h-4" />
+        </button>
       </div>
-    </Card>
+
+      <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+        <button
+          onClick={() => setTheme('glass')}
+          className={`p-2 rounded-md transition-all ${theme === 'glass'
+            ? 'bg-white shadow-sm text-gray-900'
+            : 'text-gray-500 hover:text-gray-700'
+            }`}
+        >
+          <Zap className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => setTheme('classic')}
+          className={`p-2 rounded-md transition-all ${theme === 'classic'
+            ? 'bg-gray-700 text-white shadow-sm'
+            : 'text-gray-500 hover:text-gray-300'
+            }`}
+        >
+          <Grid className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
   )
 }
 
-// ===== ДЕМО КНОПОК =====
+// ===== КОМПОНЕНТ ШАПКИ =====
+function AppHeader({ onToggleSidebar, isSidebarVisible }: {
+  onToggleSidebar: () => void
+  isSidebarVisible: boolean
+}) {
+  return (
+    <Header
+      sticky
+      blur
+      className="border-b border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm"
+    >
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onToggleSidebar}
+            icon={isSidebarVisible ? <X size={16} /> : <Menu size={16} />}
+            className="lg:hidden"
+          />
+
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Palette className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-800 dark:text-white">
+                Mipo UI Kit
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Библиотека компонентов
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <ThemeAndModeToggle />
+          <AIGenerator />
+        </div>
+      </div>
+    </Header>
+  )
+}
+
+// ===== КОМПОНЕНТ САЙДБАРА =====
+function ComponentsSidebar({
+  onComponentSelect,
+  currentComponent
+}: {
+  onComponentSelect: (component: string) => void
+  currentComponent: string
+}) {
+
+  const components = [
+    { id: 'buttons', label: 'Кнопки', icon: <Component className="w-4 h-4" /> },
+    { id: 'inputs', label: 'Поля ввода', icon: <Edit3 className="w-4 h-4" /> },
+    { id: 'feedback', label: 'Обратная связь', icon: <Activity className="w-4 h-4" /> },
+    { id: 'modals', label: 'Модальные окна', icon: <Maximize2 className="w-4 h-4" /> },
+    { id: 'collapse', label: 'Аккордеон', icon: <Minimize2 className="w-4 h-4" /> },
+    { id: 'messages', label: 'Уведомления', icon: <Bell className="w-4 h-4" /> },
+    { id: 'typography', label: 'Типография', icon: <Type className="w-4 h-4" /> },
+    { id: 'cards', label: 'Карточки', icon: <CreditCard className="w-4 h-4" /> },
+    { id: 'alerts', label: 'Алерты', icon: <AlertCircleIcon className="w-4 h-4" /> },
+    { id: 'product-card', label: 'Карточка товара', icon: <ShoppingCart className="w-4 h-4" /> },
+    { id: 'product-grid', label: 'Сетка товаров', icon: <Grid className="w-4 h-4" /> },
+  ]
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700">
+        <h2 className="font-bold text-gray-800 dark:text-white mb-1">Компоненты</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Выберите компонент для демонстрации</p>
+      </div>
+
+      <div className="flex-1 space-y-2 p-4">
+        {components.map((component) => (
+          <button
+            key={component.id}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border ${currentComponent === component.id
+              ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25 border-blue-500'
+              : 'text-gray-700 dark:text-gray-300 border-transparent hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-200 dark:hover:border-gray-700'
+              }`}
+            onClick={() => onComponentSelect(component.id)}
+          >
+            <div className={`p-2 rounded-lg ${currentComponent === component.id
+              ? 'bg-white/20'
+              : 'bg-gray-100 dark:bg-gray-800'
+              }`}>
+              {component.icon}
+            </div>
+            <span className="font-medium">{component.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ===== ГЕНЕРАЦИЯ САЙТА ЧЕРЕЗ AI =====
+function AIGenerator() {
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false)
+  const [prompt, setPrompt] = useState('')
+  const [isGenerating, setIsGenerating] = useState(false)
+  const { success, error } = useMessage()
+
+  const generateSite = async () => {
+    if (!prompt.trim()) {
+      error('Введите описание сайта')
+      return
+    }
+
+    setIsGenerating(true)
+
+    setTimeout(() => {
+      setIsGenerating(false)
+      success('Сайт успешно сгенерирован!')
+      setIsAIModalOpen(false)
+      setPrompt('')
+    }, 2000)
+  }
+
+  return (
+    <>
+      <Button
+        btnType="primary"
+        icon={<Sparkles className="w-4 h-4" />}
+        onClick={() => setIsAIModalOpen(true)}
+        className="bg-gradient-to-r from-purple-500 to-pink-500 border-0 shadow-lg shadow-purple-500/25"
+      >
+        AI Генератор
+      </Button>
+
+      <Modal
+        isOpen={isAIModalOpen}
+        onClose={() => setIsAIModalOpen(false)}
+        title={
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-800 dark:text-white">Генерация сайта через AI</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Создайте сайт по описанию</p>
+            </div>
+          </div>
+        }
+        footer={
+          <div className="flex gap-3 w-full">
+            <Button
+              btnType="secondary"
+              onClick={() => setIsAIModalOpen(false)}
+              className="flex-1"
+            >
+              Отмена
+            </Button>
+            <Button
+              btnType="primary"
+              loading={isGenerating}
+              onClick={generateSite}
+              className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 border-0"
+              icon={<Sparkles className="w-4 h-4" />}
+            >
+              {isGenerating ? 'Генерация...' : 'Сгенерировать'}
+            </Button>
+          </div>
+        }
+      >
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-gray-800 dark:text-white">
+              Описание сайта
+            </label>
+            <textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Например: Создай интернет-магазин электроники с корзиной товаров и системой фильтров..."
+              rows={4}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none transition-all duration-200"
+            />
+          </div>
+
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Примеры запросов:</h4>
+                <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-500">•</span>
+                    <span>"Лендинг для салона красоты с формой записи и галереей работ"</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-500">•</span>
+                    <span>"Блог о путешествиях с картой маршрутов и галереей фотографий"</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-500">•</span>
+                    <span>"Портфолио фотографа с фильтрами по категориям и контактной формой"</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </>
+  )
+}
+
+// ===== ДЕМО КОМПОНЕНТОВ БЕЗ CLASSNAME =====
+
 function ButtonDemo() {
   const { info } = useMessage()
-  const { theme } = useTheme()
-  
-  const buttonTypes = [
-    { type: 'primary' as const, icon: <Settings className="w-4 h-4" /> },
-    { type: 'secondary' as const, icon: <User className="w-4 h-4" /> },
-    { type: 'success' as const, icon: <CheckCircle className="w-4 h-4" /> },
-    { type: 'warning' as const, icon: <AlertTriangle className="w-4 h-4" /> },
-    { type: 'error' as const, icon: <AlertCircle className="w-4 h-4" /> },
-    { type: 'glass' as const, icon: <Zap className="w-4 h-4" /> }
-  ]
 
-  const buttonVariants = [
-    { name: 'solid', label: 'Solid' },
-    { name: 'outline', label: 'Outline' },
-    { name: 'ghost', label: 'Ghost' },
-    { name: 'link', label: 'Link' }
-  ]
-
-  const buttonSizes = [
-    { size: 'xs' as const, label: 'XS' },
-    { size: 'sm' as const, label: 'SM' },
-    { size: 'md' as const, label: 'MD' },
-    { size: 'lg' as const, label: 'LG' },
-    { size: 'xl' as const, label: 'XL' }
-  ]
+  const buttonTypes = [ 'primary', 'secondary', 'success', 'warning', 'error', 'glass' ]
 
   return (
-    <Card className="mb-6">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Button (Кнопки)</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">Универсальная кнопка с множеством вариантов стилизации и анимаций</p>
-        
-        {/* Типы кнопок */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">Типы кнопок</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Основные типы для разных действий</p>
-        <div className="flex flex-wrap gap-3 mb-6">
-          {buttonTypes.map(({ type, icon }) => (
-            <Button 
-              key={type}
-              btnType={type}
-              variant="solid"
-              onClick={() => info(`Нажата ${type} кнопка`)}
-              icon={icon}
-            >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </Button>
-          ))}
-        </div>
-
-        {/* Варианты кнопок */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">Варианты стилей</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Различные визуальные стили кнопок</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          {buttonVariants.map(({ name, label }) => (
-            <Button 
-              key={name}
-              btnType="primary"
-              variant={name as any}
-              onClick={() => info(`Вариант: ${label}`)}
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
-
-        {/* Размеры кнопок */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">Размеры кнопок</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">От XS до XL для любых нужд</p>
-        <div className="flex items-end gap-3 mb-6 flex-wrap">
-          {buttonSizes.map(({ size, label }) => (
-            <Button 
-              key={size}
-              btnType="primary"
-              variant="solid"
-              size={size}
-              onClick={() => info(`Размер: ${size}`)}
-            >
-              {label} Button
-            </Button>
-          ))}
-        </div>
-
-        {/* Кнопки с иконками */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">С иконками (позиции)</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Иконки слева, справа и состояние загрузки</p>
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Button 
-            btnType="success"
-            icon={<Download className="w-4 h-4" />}
-            iconPosition="left"
+    <Card>
+      <h2>Button (Кнопки)</h2>
+      <div>
+        {buttonTypes.map(type => (
+          <Button
+            key={type}
+            btnType={type as any}
+            onClick={() => info(`Нажата ${type} кнопка`)}
           >
-            Иконка слева
+            {type}
           </Button>
-          <Button 
-            btnType="primary"
-            icon={<Share2 className="w-4 h-4" />}
-            iconPosition="right"
-          >
-            Иконка справа
-          </Button>
-          <Button 
-            btnType="warning"
-            icon={<Plus className="w-4 h-4" />}
-            iconPosition="left"
-            loading={true}
-          >
-            Загрузка
-          </Button>
-        </div>
-
-        {/* Полная ширина */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">Полная ширина</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Кнопки растягивающиеся на всю ширину контейнера</p>
-        <div className="space-y-3">
-          <Button btnType="primary" fullWidth>
-            Кнопка на всю ширину
-          </Button>
-          <Button btnType="secondary" variant="outline" fullWidth>
-            Вторичная на всю ширину
-          </Button>
-        </div>
-
-        {/* Код для копирования */}
-        <Card 
-          header="📋 Код примера"
-          className="mt-6 bg-gray-50 dark:bg-gray-900/50"
-        >
-          <pre className="text-xs overflow-x-auto">
-{`<Button 
-  btnType="primary"     // 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'glass'
-  variant="solid"       // 'solid' | 'outline' | 'ghost' | 'link'
-  size="md"            // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  icon={<Icon />}      // ReactNode
-  iconPosition="left"  // 'left' | 'right'
-  loading={false}      // boolean
-  disabled={false}     // boolean
-  fullWidth={false}    // boolean
-  theme="glass"        // 'glass' | 'classic' (можно не указывать, будет из контекста)
-  motionProps={{}}     // MotionProps от framer-motion
-  onClick={() => {}}   // стандартный onClick
->
-  Текст кнопки
-</Button>`}
-          </pre>
-        </Card>
+        ))}
       </div>
     </Card>
   )
 }
 
-// ===== ДЕМО Collapse (Аккордеон) =====
+function TypographyDemo() {
+  return (
+    <Card>
+      <h2>Typography (Типография)</h2>
+      <div>
+        <h1>Заголовок 1</h1>
+        <h2>Заголовок 2</h2>
+        <h3>Заголовок 3</h3>
+        <p>Обычный текст</p>
+        <p>Мелкий текст</p>
+      </div>
+    </Card>
+  )
+}
+
+function CardDemo() {
+  return (
+    <Card>
+      <h2>Card (Карточки)</h2>
+      <ProductGrid>
+        <Card>
+          <h3>Простая карточка</h3>
+          <p>Содержимое карточки</p>
+        </Card>
+        
+        <Card header={<div>Карточка с заголовком</div>}>
+          <p>Карточка с header</p>
+        </Card>
+      </ProductGrid>
+    </Card>
+  )
+}
+
+function AlertDemo() {
+  return (
+    <Card>
+      <h2>Alert (Уведомления)</h2>
+      <div>
+        <div>Информационное уведомление</div>
+        <div>Успешное действие</div>
+        <div>Предупреждение</div>
+      </div>
+    </Card>
+  )
+}
+
+function ProgressDemo() {
+  const [progress, setProgress] = useState(0)
+
+  const startProgress = () => {
+    setProgress(0)
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval)
+          return 100
+        }
+        return prev + 10
+      })
+    }, 300)
+  }
+
+  return (
+    <Card>
+      <h2>Progress (Прогресс)</h2>
+      <Progress value={progress} type="primary" />
+      <Button onClick={startProgress}>Запустить прогресс</Button>
+    </Card>
+  )
+}
+
+function SpinnerDemo() {
+  return (
+    <Card>
+      <h2>Spinner (Загрузка)</h2>
+      <Spinner size="sm" />
+      <Spinner size="md" />
+      <Spinner size="lg" />
+    </Card>
+  )
+}
+
 function CollapseDemo() {
-  const { info } = useMessage()
   const items = [
     {
       key: '1',
       label: 'Раздел 1: Основная информация',
-      children: (
-        <div className="space-y-2">
-          <p className="text-gray-700 dark:text-gray-300">Это содержимое первого раздела. Здесь может быть любой контент: текст, картинки, другие компоненты.</p>
-          <Button btnType="primary" size="sm">Действие внутри</Button>
-        </div>
-      ),
-      extra: <Badge color="blue">NEW</Badge>
+      children: <p>Содержимое первого раздела</p>,
     },
     {
       key: '2',
       label: 'Раздел 2: Технические детали',
-      children: (
-        <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
-          <li>Технология: React 18+</li>
-          <li>Анимации: Framer Motion</li>
-          <li>Стилизация: Tailwind CSS</li>
-          <li>Иконки: Lucide React</li>
-        </ul>
-      )
-    },
-    {
-      key: '3',
-      label: 'Раздел 3: Примеры кода',
-      children: (
-        <Card className="bg-gray-50 dark:bg-gray-900/50">
-          <pre className="text-sm text-gray-700 dark:text-gray-300">
-{`const example = () => {
-  console.log('Пример кода')
-}`}
-          </pre>
-        </Card>
-      ),
-      disabled: false
+      children: <p>Техническая информация</p>,
     }
   ]
 
   return (
-    <Card className="mb-6">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Collapse (Аккордеон)</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">Компонент для создания сворачиваемых панелей и аккордеона</p>
-        
-        {/* Базовый аккордеон */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">Базовый аккордеон</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Несколько открытых панелей одновременно</p>
-        <Collapse 
-          items={items}
-          defaultActiveKey={['1']}
-          onChange={(keys) => info(`Активные разделы: ${keys.join(', ')}`)}
-          className="mb-6"
-        />
-
-        {/* Аккордеон без границ */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">Ghost-стиль (без границ)</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Минималистичный дизайн без рамок</p>
-        <Collapse 
-          items={items}
-          ghost={true}
-          expandIconPosition="left"
-          className="mb-6"
-        />
-
-        {/* Аккордеон с контролами */}
-        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">С кнопками управления</h3>
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Кнопки "Развернуть все" / "Свернуть все"</p>
-        <Collapse 
-          items={items}
-          showControls={true}
-          controlPosition="top"
-          accordion={false}
-        />
-
-        {/* Код для копирования */}
-        <Card 
-          header="📋 Props Collapse"
-          className="mt-6 bg-gray-50 dark:bg-gray-900/50"
-        >
-          <pre className="text-xs overflow-x-auto">
-{`interface CollapseProps {
-  activeKey?: string[]                     // Контролируемые ключи
-  defaultActiveKey?: string[]             // Ключи по умолчанию
-  onChange?: (keys: string[]) => void     // Callback при изменении
-  accordion?: boolean                     // Только один активный
-  ghost?: boolean                         // Без границ
-  expandIconPosition?: 'left' | 'right'   // Позиция иконки
-  showControls?: boolean                  // Показать кнопки управления
-  controlPosition?: 'top' | 'bottom'      // Позиция кнопок
-  items?: CollapsePanelProps[]            // Массив данных
-  children?: ReactNode                    // Или дочерние компоненты
-  theme?: 'glass' | 'classic'             // Тема
-}
-
-interface CollapsePanelProps {
-  key: string              // Уникальный ключ
-  label: ReactNode         // Заголовок
-  children: ReactNode      // Содержимое
-  extra?: ReactNode         // Доп. элемент справа
-  showArrow?: boolean      // Показывать стрелку
-  disabled?: boolean       // Отключить панель
-}`}
-          </pre>
-        </Card>
-      </div>
+    <Card>
+      <h2>Collapse (Аккордеон)</h2>
+      <Collapse items={items} defaultActiveKey={['1']} />
     </Card>
   )
 }
 
-// ===== ДЕМО Modal (Модальное окно) =====
 function ModalDemo() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalSize, setModalSize] = useState<'sm' | 'md' | 'lg' | 'xl' | 'full'>('md')
-  const { info, success } = useMessage()
-
-  const openModal = (size: typeof modalSize) => {
-    setModalSize(size)
-    setIsModalOpen(true)
-  }
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Card className="mb-6">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Modal (Модальные окна)</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">Всплывающие окна с анимациями и различными размерами</p>
-        
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Button btnType="primary" onClick={() => openModal('sm')}>Small Modal</Button>
-          <Button btnType="secondary" onClick={() => openModal('md')}>Medium Modal</Button>
-          <Button btnType="success" onClick={() => openModal('lg')}>Large Modal</Button>
-          <Button btnType="warning" onClick={() => openModal('xl')}>Extra Large</Button>
-          <Button btnType="error" onClick={() => openModal('full')}>Full Width</Button>
-        </div>
+    <Card>
+      <h2>Modal (Модальные окна)</h2>
+      <Button btnType="primary" onClick={() => setIsOpen(true)}>
+        Открыть модальное окно
+      </Button>
 
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title={`Модальное окно (${modalSize})`}
-          size={modalSize}
-          footer={
-            <div className="flex gap-2">
-              <Button btnType="secondary" variant="outline" onClick={() => setIsModalOpen(false)}>
-                Отмена
-              </Button>
-              <Button btnType="primary" onClick={() => { success('Сохранено!'); setIsModalOpen(false) }}>
-                Сохранить
-              </Button>
-            </div>
-          }
-          motionProps={{
-            overlay: { transition: { duration: 0.3 } },
-            content: { transition: { type: 'spring', damping: 25, stiffness: 300 } }
-          }}
-        >
-          <div className="space-y-4">
-            <p className="text-gray-700 dark:text-gray-300">Это содержимое модального окна размера <strong className="text-gray-900 dark:text-white">{modalSize}</strong>.</p>
-            <p className="text-gray-700 dark:text-gray-300">Вы можете разместить здесь любую информацию, формы или другие компоненты.</p>
-            <Card>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Вложенная карточка в модальном окне</p>
-            </Card>
-          </div>
-        </Modal>
-
-        {/* Код для копирования */}
-        <Card 
-          header="📋 Props Modal"
-          className="mt-6 bg-gray-50 dark:bg-gray-900/50"
-        >
-          <pre className="text-xs overflow-x-auto">
-{`interface ModalProps {
-  isOpen: boolean                    // Открыто/закрыто
-  onClose: () => void               // Callback закрытия
-  title?: ReactNode                  // Заголовок
-  children: ReactNode                // Содержимое
-  footer?: ReactNode                 // Подвал с кнопками
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'  // Размер
-  hideClose?: boolean                // Скрыть кнопку X
-  backdropClose?: boolean            // Закрывать по клику на фон
-  theme?: 'glass' | 'classic'        // Тема
-  motionProps?: {                     // Анимации
-    overlay?: MotionProps
-    content?: MotionProps
-  }
-}`}
-          </pre>
-        </Card>
-      </div>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Пример модального окна"
+        footer={<Button onClick={() => setIsOpen(false)}>Закрыть</Button>}
+      >
+        <p>Содержимое модального окна</p>
+      </Modal>
     </Card>
   )
 }
 
-// ===== ДЕМО Dropdown (Выпадающее меню) =====
-function DropdownDemo() {
-  const { info, success, warning, error } = useMessage()
-  
-  const menuItems = [
-    {
-      key: 'profile',
-      label: 'Мой профиль',
-      icon: <User className="w-4 h-4" />,
-      onClick: () => info('Открыт профиль')
-    },
-    {
-      key: 'settings',
-      label: 'Настройки',
-      icon: <Settings className="w-4 h-4" />,
-      onClick: () => info('Открыты настройки'),
-      badge: <span className="bg-blue-500 text-white px-2 py-0.5 rounded-full text-xs">3</span>
-    },
-    {
-      key: 'notifications',
-      label: 'Уведомления',
-      icon: <Bell className="w-4 h-4" />,
-      children: [
-        {
-          key: 'email',
-          label: 'Email',
-          icon: <Mail className="w-4 h-4" />,
-          onClick: () => success('Email уведомления включены')
-        },
-        {
-          key: 'push',
-          label: 'Push',
-          icon: <Activity className="w-4 h-4" />,
-          onClick: () => success('Push уведомления включены')
-        }
-      ]
-    },
-    { type: 'divider' as const },
-    {
-      key: 'logout',
-      label: 'Выйти',
-      icon: <LogOut className="w-4 h-4" />,
-      onClick: () => warning('Вы вышли из системы'),
-      disabled: false
-    }
-  ]
-
-  return (
-    <Card className="mb-6">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Dropdown (Выпадающее меню)</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">Многоуровневые меню с анимациями и вложенными элементами</p>
-        
-        <div className="flex flex-wrap gap-4 mb-6">
-          {/* Базовое меню */}
-          {/* <Dropdown 
-            items={menuItems}
-            trigger={
-              <Button btnType="primary" icon={<ChevronDown className="w-4 h-4" />}>
-                Меню пользователя
-              </Button>
-            }
-            placement="bottom-start"
-          /> */}
-
-          {/* Меню вверх */}
-
-
-          {/* Кастомный триггер */}
-/
-        </div>
-
-        {/* Код для копирования */}
-        <Card 
-          header="📋 Props Dropdown"
-          className="mt-6 bg-gray-50 dark:bg-gray-900/50"
-        >
-          <pre className="text-xs overflow-x-auto">
-{`interface DropdownProps {
-  items: DropdownItem[]                    // Элементы меню
-  trigger?: ReactNode                      // Кастомный триггер
-  placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
-  className?: string
-  theme?: 'glass' | 'classic'
-  disabled?: boolean
-  motionProps?: MotionProps
-  itemMotionProps?: MotionProps
-}
-
-interface DropdownItem {
-  key: string              // Уникальный ключ
-  label: ReactNode         // Текст элемента
-  icon?: ReactNode         // Иконка
-  disabled?: boolean       // Отключен
-  onClick?: () => void     // Callback
-  badge?: ReactNode        // Бейдж
-  children?: DropdownItem[] // Вложенные элементы
-}`}
-          </pre>
-        </Card>
-      </div>
-    </Card>
-  )
-}
-
-// ===== ДЕМО Card (Карточки) =====
-function CardDemo() {
-  const { info } = useMessage()
-  
-  return (
-    <Card className="mb-6">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Card (Карточки)</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">Гибкий контейнер для группировки контента</p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {/* Простая карточка */}
-          <Card>
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Базовая карточка</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Простой контент без header/footer</p>
-          </Card>
-
-          {/* Карточка с заголовком */}
-          <Card 
-            header={<h3 className="font-semibold text-gray-800 dark:text-white">📊 Карточка с заголовком</h3>}
-          >
-            <p className="text-gray-700 dark:text-gray-300">Эта карточка имеет заголовок</p>
-          </Card>
-
-          {/* Карточка с подвалом */}
-          <Card 
-            header={<h3 className="font-semibold text-gray-800 dark:text-white">🎯 С действиями</h3>}
-            footer={
-              <div className="flex justify-end gap-2">
-                <Button btnType="secondary" size="sm">Отмена</Button>
-                <Button btnType="primary" size="sm">OK</Button>
-              </div>
-            }
-          >
-            <p className="text-gray-700 dark:text-gray-300">Карточка с кнопками действий в подвале</p>
-          </Card>
-
-          {/* Карточка с кастомными классами */}
-          <Card 
-            className="border-2 border-purple-500"
-            headerClassName="bg-purple-50 dark:bg-purple-900/20"
-            contentClassName="bg-purple-50/50 dark:bg-purple-900/10"
-          >
-            <h3 className="text-purple-600 dark:text-purple-400 font-semibold">Кастомная тема</h3>
-            <p className="text-gray-700 dark:text-gray-300">Изменены классы для всех секций</p>
-          </Card>
-        </div>
-
-        {/* Код для копирования */}
-        <Card 
-          header="📋 Props Card"
-          className="mt-6 bg-gray-50 dark:bg-gray-900/50"
-        >
-          <pre className="text-xs overflow-x-auto">
-{`interface CardProps {
-  children: ReactNode                     // Основной контент
-  header?: ReactNode                      // Верхняя секция
-  footer?: ReactNode                      // Нижняя секция
-  className?: string                      // Классы корневого элемента
-  headerClassName?: string                // Классы header
-  contentClassName?: string               // Классы контента
-  footerClassName?: string                // Классы footer
-  theme?: 'glass' | 'classic'            // Тема
-}`}
-          </pre>
-        </Card>
-      </div>
-    </Card>
-  )
-}
-
-// ===== ДЕМО Message (Сообщения) =====
 function MessageDemo() {
   const { info, success, warning, error } = useMessage()
 
   return (
-    <Card className="mb-6">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Message (Уведомления)</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">Всплывающие уведомления с таймером автоматического закрытия</p>
-        
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Button btnType="primary" onClick={() => info('Информационное сообщение', 5000)}>
-            Info Message
-          </Button>
-          <Button btnType="success" onClick={() => success('Операция успешна!', 4000)}>
-            Success Message
-          </Button>
-          <Button btnType="warning" onClick={() => warning('Предупреждение!', 6000)}>
-            Warning Message
-          </Button>
-          <Button btnType="error" onClick={() => error('Ошибка произошла', 7000)}>
-            Error Message
-          </Button>
-        </div>
-
-        <Card 
-          header="📋 Как использовать Message"
-          className="bg-gray-50 dark:bg-gray-900/50"
-        >
-          <pre className="text-xs overflow-x-auto">
-{`// Внутри компонента:
-const { info, success, warning, error } = useMessage()
-
-// Вызов:
-info('Текст', 5000)      // Тип: 'info' | 'success' | 'warning' | 'error'
-success('Успех!', 3000)  // Второй параметр - длительность (ms)
-warning('Внимание', 6000)
-error('Ошибка', 4000)
-
-// Подключить провайдер в корне:
-<MessageProvider>
-  <App />
-</MessageProvider>`}
-          </pre>
-        </Card>
+    <Card>
+      <h2>Message (Уведомления)</h2>
+      <div>
+        <Button onClick={() => info('Информация')}>Info</Button>
+        <Button onClick={() => success('Успех')}>Success</Button>
+        <Button onClick={() => warning('Предупреждение')}>Warning</Button>
+        <Button onClick={() => error('Ошибка')}>Error</Button>
       </div>
     </Card>
   )
 }
 
-// ===== ГЛАВНЫЙ КОМПОНЕНТ ДОКУМЕНТАЦИИ =====
+function ProductCardDemo() {
+  const { success } = useMessage()
+
+  return (
+    <Card>
+      <h2>ProductCard (Карточка товара)</h2>
+      <ProductGrid>
+        <ProductCard
+          id="1"
+          image="/product1.jpg"
+          title="Ноутбук ProBook"
+          price={89990}
+          oldPrice={99990}
+          rating={4.5}
+          reviewCount={128}
+          badges={[{ type: 'sale', text: 'Скидка' }]}
+          onAddToCart={() => success('Товар добавлен в корзину')}
+        />
+        
+        <ProductCard
+          id="2"
+          image="/product2.jpg"
+          title="Беспроводные наушники"
+          price={12990}
+          rating={5}
+          reviewCount={45}
+          badges={[{ type: 'new', text: 'Новинка' }]}
+          onAddToCart={() => success('Товар добавлен в корзину')}
+        />
+      </ProductGrid>
+    </Card>
+  )
+}
+
+function ProductGridDemo() {
+
+
+  return (
+    <Card>
+      <h2>ProductGrid (Сетка товаров)</h2>
+      
+      {/* Состояние загрузки */}
+      <ProductGrid
+        isLoading={true}
+        skeletonCount={6}
+        gridConfig={{
+          columns: 3,
+          gap: 'lg',
+          responsive: true
+        }}
+      />
+
+      {/* Пустое состояние */}
+      <ProductGrid
+        isEmpty={true}
+        emptyState={<div>Товары не найдены</div>}
+      />
+
+      {/* Анимированная сетка */}
+      <ProductGrid
+        gridConfig={{
+          columns: 3,
+          gap: 'md',
+          responsive: true,
+          breakpoints: { sm: 1, md: 2, lg: 3 }
+        }}
+        animationConfig={{
+          type: 'stagger',
+          duration: 0.3
+        }}
+      >
+        <ProductCard
+          id="1"
+          image="/product1.jpg"
+          title="Товар 1"
+          price={1000}
+        />
+        <ProductCard
+          id="2"
+          image="/product2.jpg"
+          title="Товар 2"
+          price={2000}
+        />
+      </ProductGrid>
+    </Card>
+  )
+}
+
+// ===== ОСНОВНОЙ КОМПОНЕНТ =====
 export default function TestMain() {
+  const [isSidebarVisible, setSidebarVisible] = useState(true)
+  const [currentComponent, setCurrentComponent] = useState('buttons')
+  
+  const contentItems = [
+    {
+      type: 'image' as const,
+      content: (
+        <div>
+          <img src="/project1.jpg" alt="Project 1" />
+        </div>
+      ),
+      size: { width: 80, height: 60 },
+      motionProps: {
+        whileHover: { scale: 1.3, rotate: 5 }
+      }
+    }
+  ];
+
+  const renderComponent = () => {
+    switch (currentComponent) {
+      case 'buttons': return <ButtonDemo />
+      case 'inputs': return <InputDemo />
+      case 'feedback': return <FeedbackDemo />
+      case 'modals': return <ModalDemo />
+      case 'collapse': return <CollapseDemo />
+      case 'messages': return <MessageDemo />
+      case 'typography': return <TypographyDemo />
+      case 'cards': return <CardDemo />
+      case 'alerts': return <AlertDemo />
+      case 'progress': return <ProgressDemo />
+      case 'spinner': return <SpinnerDemo />
+      case 'product-card': return <ProductCardDemo />
+      case 'product-grid': return <ProductGridDemo />
+      default: return <ButtonDemo />
+    }
+  }
+
   return (
     <ThemeProvider defaultTheme="glass" defaultMode="system">
       <MessageProvider>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
-          {/* Шапка */}
-          <Card className="mb-8">
-            <div className="p-6 text-center">
-              <h1 className="text-4xl font-bold mb-2 gradient-text text-gray-800 dark:text-white">🎨 Mipo UI Kit</h1>
-              <p className="text-gray-600 dark:text-gray-400">Библиотека React компонентов с темами Glass и Classic</p>
-            </div>
-          </Card>
+        <Layout>
+          <AppHeader
+            onToggleSidebar={() => setSidebarVisible(!isSidebarVisible)}
+            isSidebarVisible={isSidebarVisible}
+          />
 
-          {/* Переключатель темы */}
-          <ThemeToggle />
+          <div className="flex flex-1">
+            <Sidebar
+              position="left"
+              width="md"
+              static={true}
+              isOpen={isSidebarVisible}
+            >
+              <ComponentsSidebar
+                onComponentSelect={setCurrentComponent}
+                currentComponent={currentComponent}
+              />
+            </Sidebar>
 
-          {/* Все компоненты */}
-          <div className="space-y-6">
-            <ButtonDemo />
-            <CardDemo />
-            <DropdownDemo />
-            <CollapseDemo />
-            <ModalDemo />
-            <MessageDemo />
+            <Body padding="lg">
+              <Card>
+                <h1>{getComponentTitle(currentComponent)}</h1>
+                <p>{getComponentDescription(currentComponent)}</p>
+              </Card>
+              
+              <div>
+                <h2>Пример использования</h2>
+                <FloatingContentBackground
+                  contentItems={contentItems}
+                  config={{
+                    enableRotation: true,
+                    pauseOnHover: true
+                  }}
+                />
+              </div>
+              
+              {renderComponent()}
+            </Body>
           </div>
 
-          {/* Футер документации */}
-          <Card className="mt-8">
-            <div className="p-6 text-center">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                © 2024 Mipo UI Kit | <a href="#" className="text-blue-500 hover:underline">GitHub</a> | <a href="#" className="text-blue-500 hover:underline">Документация</a>
-              </p>
-            </div>
-          </Card>
-        </div>
+          <Footer>
+            <p>© 2024 Mipo UI Kit | Библиотека React компонентов с AI-генерацией</p>
+          </Footer>
+        </Layout>
       </MessageProvider>
     </ThemeProvider>
   )
 }
 
-// ===== ВСПОМОГАТЕЛЬНЫЙ КОМПОНЕНТ =====
-function Badge({ children, color = 'blue' }: { children: React.ReactNode, color?: string }) {
-  const colors: Record<string, string> = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    yellow: 'bg-yellow-500',
-    red: 'bg-red-500',
-    purple: 'bg-purple-500'
+// ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+function getComponentTitle(componentId: string): string {
+  const titles: Record<string, string> = {
+    buttons: 'Button (Кнопки)',
+    inputs: 'Input & Textarea (Поля ввода)',
+    feedback: 'Feedback (Обратная связь)',
+    modals: 'Modal (Модальные окна)',
+    collapse: 'Collapse (Аккордеон)',
+    messages: 'Message (Уведомления)',
+    typography: 'Typography (Типография)',
+    cards: 'Card (Карточки)',
+    alerts: 'Alert (Уведомления)',
+    progress: 'Progress (Прогресс)',
+    spinner: 'Spinner (Загрузка)',
+    'product-card': 'ProductCard (Карточка товара)',
+    'product-grid': 'ProductGrid (Сетка товаров)'
   }
-  
-  return (
-    <span className={`${colors[color]} text-white px-2 py-0.5 rounded-full text-xs font-medium`}>
-      {children}
-    </span>
-  )
+  return titles[componentId] || 'Компонент'
+}
+
+function getComponentDescription(componentId: string): string {
+  const descriptions: Record<string, string> = {
+    buttons: 'Универсальная кнопка с множеством вариантов стилизации и анимаций',
+    inputs: 'Поля ввода с валидацией и анимациями',
+    feedback: 'Компоненты загрузки, прогресс-бары и скелетоны',
+    modals: 'Всплывающие окна с анимациями и различными размерами',
+    collapse: 'Компонент для создания сворачиваемых панелей и аккордеона',
+    messages: 'Всплывающие уведомления с таймером автоматического закрытия',
+    typography: 'Типографические стили для заголовков и текста',
+    cards: 'Гибкий контейнер для группировки контента',
+    alerts: 'Визуальные уведомления для важной информации',
+    progress: 'Индикатор выполнения операций',
+    spinner: 'Анимированный индикатор загрузки',
+    'product-card': 'Карточка товара для интернет-магазина с рейтингом и ценой',
+    'product-grid': 'Адаптивная сетка для отображения товаров с анимациями'
+  }
+  return descriptions[componentId] || 'Демонстрация компонента'
 }

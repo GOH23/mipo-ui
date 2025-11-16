@@ -1,11 +1,23 @@
+// components/Dropdown/Dropdown.tsx
 "use client"
-import { ReactNode, useState, useRef, useEffect } from 'react';
+import { ReactNode, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence, MotionProps } from 'framer-motion';
-import { ChevronDown, Check, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import Button from '../Button/Button';
 import { useTheme } from '../../themes/ThemeContext';
 import { getThemeClasses } from '../../themes/themeClasses';
 
+/**
+ * Интерфейс для элемента выпадающего списка
+ * @interface DropdownItem
+ * @property {string} key - Уникальный ключ элемента
+ * @property {ReactNode} label - Текст элемента
+ * @property {ReactNode} [icon] - Иконка элемента
+ * @property {boolean} [disabled=false] - Отключить элемент
+ * @property {DropdownItem[]} [children] - Дочерние элементы (для вложенных меню)
+ * @property {function} [onClick] - Обработчик клика по элементу
+ * @property {ReactNode} [badge] - Бейдж элемента
+ */
 export interface DropdownItem {
   key: string;
   label: ReactNode;
@@ -16,6 +28,18 @@ export interface DropdownItem {
   badge?: ReactNode;
 }
 
+/**
+ * Интерфейс для компонента Dropdown
+ * @interface DropdownProps
+ * @property {DropdownItem[]} items - Массив элементов меню
+ * @property {ReactNode} [trigger] - Кастомный триггер для открытия меню
+ * @property {'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'} [placement='bottom-start'] - Позиционирование меню
+ * @property {string} [className] - Дополнительные CSS-классы
+ * @property {'glass' | 'classic'} [theme] - Тема компонента (переопределяет контекстную)
+ * @property {boolean} [disabled=false] - Отключить dropdown
+ * @property {MotionProps} [motionProps] - Свойства анимации для меню
+ * @property {MotionProps} [itemMotionProps] - Свойства анимации для элементов
+ */
 export interface DropdownProps {
   items: DropdownItem[];
   trigger?: ReactNode;
@@ -27,6 +51,22 @@ export interface DropdownProps {
   itemMotionProps?: MotionProps;
 }
 
+/**
+ * Компонент Dropdown для создания выпадающих меню
+ * @component
+ * @param {DropdownProps} props - Свойства компонента
+ * @returns {JSX.Element} Компонент выпадающего меню
+ * 
+ * @example
+ * <Dropdown
+ *   items={[
+ *     { key: '1', label: 'Пункт 1', onClick: () => console.log('1') },
+ *     { key: '2', label: 'Пункт 2', disabled: true },
+ *     { key: '3', label: 'Пункт 3', children: [...] }
+ *   ]}
+ *   placement="bottom-start"
+ * />
+ */
 const Dropdown = ({
   items,
   trigger,
@@ -44,11 +84,17 @@ const Dropdown = ({
   const { theme: contextTheme } = useTheme();
   const effectiveTheme = propTheme || contextTheme;
 
-  const dropdownClasses = getThemeClasses(effectiveTheme, 'dropdown');
-  const itemClasses = getThemeClasses(effectiveTheme, 'dropdown-item');
-  const activeItemClasses = getThemeClasses(effectiveTheme, 'dropdown-item-active');
-  const submenuClasses = getThemeClasses(effectiveTheme, 'dropdown-submenu');
+  // Оптимизация: мемоизация классов
+  const dropdownClasses = useMemo(() => 
+    getThemeClasses(effectiveTheme, 'dropdown'), [effectiveTheme]);
+  
+  const itemClasses = useMemo(() => 
+    getThemeClasses(effectiveTheme, 'dropdown-item'), [effectiveTheme]);
+  
+  const submenuClasses = useMemo(() => 
+    getThemeClasses(effectiveTheme, 'dropdown-submenu'), [effectiveTheme]);
 
+  // Оптимизация: расчет позиции
   useEffect(() => {
     if (isOpen && dropdownRef.current && triggerRef.current) {
       const dropdownRect = dropdownRef.current.getBoundingClientRect();
@@ -87,6 +133,7 @@ const Dropdown = ({
     }
   }, [isOpen, placement]);
 
+  // Оптимизация: обработчик клика вне компонента
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && 
@@ -99,7 +146,8 @@ const Dropdown = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const defaultMotionProps: MotionProps = {
+  // Оптимизация: мемоизация motion props
+  const defaultMotionProps: MotionProps = useMemo(() => ({
     initial: { opacity: 0, scale: 0.95 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.95 },
@@ -109,16 +157,17 @@ const Dropdown = ({
       stiffness: 200
     },
     ...motionProps
-  };
+  }), [motionProps]);
 
-  const defaultItemMotionProps: MotionProps = {
+  const defaultItemMotionProps: MotionProps = useMemo(() => ({
     initial: { opacity: 0, x: -10 },
     animate: { opacity: 1, x: 0 },
     transition: { duration: 0.15 },
     ...itemMotionProps
-  };
+  }), [itemMotionProps]);
 
-  const renderItems = (items: DropdownItem[], level = 0) => (
+  // Оптимизация: useCallback для рендер-функции
+  const renderItems = useCallback((items: DropdownItem[], level = 0) => (
     <div className="py-1">
       {items.map((item, index) => (
         <motion.div
@@ -161,7 +210,7 @@ const Dropdown = ({
         </motion.div>
       ))}
     </div>
-  );
+  ), [defaultItemMotionProps, itemClasses, submenuClasses]);
 
   return (
     <div className="relative inline-block">

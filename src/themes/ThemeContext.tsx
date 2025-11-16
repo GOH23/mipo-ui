@@ -30,31 +30,35 @@ export const ThemeProvider = ({
   defaultTheme?: Theme;
   defaultMode?: Mode;
 }) => {
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
-  const [mode, setMode] = useState<Mode>(defaultMode);
-  const [isDarkMode, setIsDarkMode] = useState(false); // Начальное значение false для SSR
+  const [theme, setThemeState] = useState<Theme>(defaultTheme);
+  const [mode, setModeState] = useState<Mode>(defaultMode);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Инициализация ТОЛЬКО на клиенте
+  // Инициализация из localStorage
   useEffect(() => {
     const storedTheme = localStorage.getItem('mipo-ui-theme') as Theme | null;
     const storedMode = localStorage.getItem('mipo-ui-mode') as Mode | null;
     
-    if (storedTheme) setTheme(storedTheme);
-    if (storedMode) setMode(storedMode);
+    if (storedTheme) setThemeState(storedTheme);
+    if (storedMode) setModeState(storedMode);
   }, []);
 
-  // Обработка режима
+  // Обновление темы
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    localStorage.setItem('mipo-ui-theme', newTheme);
+  };
+
+  // Обновление режима
+  const setMode = (newMode: Mode) => {
+    setModeState(newMode);
+    localStorage.setItem('mipo-ui-mode', newMode);
+  };
+
+  // Обработка системного режима
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    localStorage.setItem('mipo-ui-theme', theme);
-  }, [theme]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    localStorage.setItem('mipo-ui-mode', mode);
-    
     if (mode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       setIsDarkMode(mediaQuery.matches);
@@ -70,10 +74,15 @@ export const ThemeProvider = ({
     }
   }, [mode]);
 
-  // Безопасное обновление DOM
+  // Применение dark класса
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.documentElement.classList.toggle('dark', isDarkMode);
+      const html = document.documentElement;
+      if (isDarkMode) {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
     }
   }, [isDarkMode]);
 
